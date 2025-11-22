@@ -1,78 +1,108 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using SimpleClassLibrary;
 
-class Program
+namespace DictionaryWorkerApp
 {
-    static void Main(string[] args)
+    class Program
     {
-        Worker[] workers = null;
-        bool exit = false;
-
-        while (!exit)
+        static void Main(string[] args)
         {
-            Console.Clear();
-            Console.WriteLine("=== Система управління працівниками ===");
-            Console.WriteLine("1. Створити масив працівників");
-            Console.WriteLine("2. Показати всіх працівників");
-            Console.WriteLine("3. Показати конкретного працівника");
-            Console.WriteLine("4. Розрахувати стаж роботи");
-            Console.WriteLine("5. Перевірити проживання біля головного офісу");
-            Console.WriteLine("6. Ввести премію для працівника");
-            Console.WriteLine("7. Показати премії всіх працівників");
-            Console.WriteLine("8. Вийти");
-            Console.Write("Оберіть опцію: ");
-
-            string choice = Console.ReadLine();
-
-            switch (choice)
-            {
-                case "1":
-                    workers = CreateWorkersArray();
-                    break;
-                case "2":
-                    DisplayAllWorkers(workers);
-                    break;
-                case "3":
-                    DisplaySpecificWorker(workers);
-                    break;
-                case "4":
-                    CalculateWorkExperience(workers);
-                    break;
-                case "5":
-                    CheckLivingNearOffice(workers);
-                    break;
-                case "6":
-                    InputBonusForWorker(workers);
-                    break;
-                case "7":
-                    DisplayAllBonuses(workers);
-                    break;
-                case "8":
-                    exit = true;
-                    break;
-                default:
-                    Console.WriteLine("Невірна опція. Натисніть будь-яку клавішу для продовження...");
-                    Console.ReadKey();
-                    break;
-            }
+            DictionaryWorkerManager manager = new DictionaryWorkerManager();
+            manager.Run();
         }
     }
 
-    // Статичний метод для створення масиву працівників
-    public static Worker[] CreateWorkersArray()
+    public class DictionaryWorkerManager
     {
-        Console.Write("Введіть кількість працівників: ");
-        int n;
-        while (!int.TryParse(Console.ReadLine(), out n) || n <= 0)
+        private Dictionary<int, Worker> workersDictionary;
+        private int nextId;
+
+        public DictionaryWorkerManager()
         {
-            Console.Write("Будь ласка, введіть коректне додатне число: ");
+            workersDictionary = new Dictionary<int, Worker>();
+            nextId = 1;
         }
 
-        Worker[] workers = new Worker[n];
-
-        for (int i = 0; i < n; i++)
+        public void Run()
         {
-            Console.WriteLine($"\nВведення даних для працівника #{i + 1}:");
+            bool exit = false;
+
+            while (!exit)
+            {
+                Console.Clear();
+                Console.WriteLine("=== СИСТЕМА УПРАВЛІННЯ ПРАЦІВНИКАМИ З Dictionary ===");
+                Console.WriteLine("1. Створити та додати працівника");
+                Console.WriteLine("2. Показати всіх працівників");
+                Console.WriteLine("3. Пошук працівника за ID");
+                Console.WriteLine("4. Пошук працівника за іменем");
+                Console.WriteLine("5. Видалити працівника");
+                Console.WriteLine("6. Оновити дані працівника");
+                Console.WriteLine("7. Розрахувати стаж роботи");
+                Console.WriteLine("8. Перевірити проживання біля офісу");
+                Console.WriteLine("9. Ввести премію для працівника");
+                Console.WriteLine("10. Показати премії всіх працівників");
+                Console.WriteLine("11. Статистика");
+                Console.WriteLine("12. Очистити словник");
+                Console.WriteLine("13. Вихід");
+                Console.Write("Оберіть опцію: ");
+
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        AddWorker();
+                        break;
+                    case "2":
+                        DisplayAllWorkers();
+                        break;
+                    case "3":
+                        FindWorkerById();
+                        break;
+                    case "4":
+                        FindWorkerByName();
+                        break;
+                    case "5":
+                        RemoveWorker();
+                        break;
+                    case "6":
+                        UpdateWorker();
+                        break;
+                    case "7":
+                        CalculateWorkExperience();
+                        break;
+                    case "8":
+                        CheckLivingNearOffice();
+                        break;
+                    case "9":
+                        InputBonusForWorker();
+                        break;
+                    case "10":
+                        DisplayAllBonuses();
+                        break;
+                    case "11":
+                        ShowStatistics();
+                        break;
+                    case "12":
+                        ClearDictionary();
+                        break;
+                    case "13":
+                        exit = true;
+                        break;
+                    default:
+                        Console.WriteLine("Невірна опція. Натисніть будь-яку клавішу...");
+                        Console.ReadKey();
+                        break;
+                }
+            }
+        }
+
+        // 1. Створення об'єкта класу-колекції та додавання елементів
+        private void AddWorker()
+        {
+            Console.WriteLine("\n=== Створення нового працівника ===");
 
             Console.Write("Повне ім'я: ");
             string fullName = Console.ReadLine();
@@ -109,158 +139,327 @@ class Program
             bool isFullTime = fullTimeInput == "так" || fullTimeInput == "true" || fullTimeInput == "1";
 
             Company company = new Company(companyName, mainOfficeCity, position, salary, isFullTime);
-            workers[i] = new Worker(fullName, homeCity, startDate, company);
+            Worker worker = new Worker(fullName, homeCity, startDate, company);
 
-            // Запит на введення премії
+            // Додавання премії
             Console.Write("\nБажаєте ввести премію для цього працівника? (так/ні): ");
             string inputBonus = Console.ReadLine().ToLower();
             if (inputBonus == "так" || inputBonus == "1")
             {
-                workers[i].InputBonus();
+                worker.InputBonus();
             }
+
+            // Додавання до Dictionary
+            workersDictionary.Add(nextId, worker);
+            Console.WriteLine($"\n Працівника додано з ID: {nextId}");
+            Console.WriteLine($" Загальна кількість працівників: {workersDictionary.Count}");
+            nextId++;
+
+            Console.ReadKey();
         }
 
-        Console.WriteLine($"\nУспішно створено {n} працівників. Натисніть будь-яку клавішу для продовження...");
-        Console.ReadKey();
-        return workers;
-    }
-
-    // Статичний метод для відображення конкретного працівника
-    public static void DisplayWorker(Worker worker)
-    {
-        if (worker == null)
+        // 2. Відображення всіх елементів
+        private void DisplayAllWorkers()
         {
-            Console.WriteLine("Працівник не існує.");
-            return;
-        }
-
-        Console.WriteLine("=== Деталі працівника ===");
-        Console.WriteLine(worker.ToString());
-        Console.WriteLine($"Стаж роботи: {worker.GetWorkExperience()} місяців");
-        Console.WriteLine($"Мешкає біля головного офісу: {(worker.LivesNotFarFromTheMainOffice() ? "ТАК" : "НІ")}");
-        Console.WriteLine("========================");
-    }
-
-    // Статичний метод для відображення всіх працівників
-    public static void DisplayAllWorkers(Worker[] workers)
-    {
-        if (workers == null || workers.Length == 0)
-        {
-            Console.WriteLine("Немає доступних працівників. Будь ласка, спочатку створіть масив працівників.");
-        }
-        else
-        {
-            Console.WriteLine($"\n=== Всі працівники ({workers.Length} всього) ===");
-            for (int i = 0; i < workers.Length; i++)
+            Console.WriteLine($"\n=== ВСІ ПРАЦІВНИКИ ({workersDictionary.Count} всього) ===");
+            
+            if (workersDictionary.Count == 0)
             {
-                Console.WriteLine($"\nПрацівник #{i + 1}:");
-                DisplayWorker(workers[i]);
+                Console.WriteLine("Словник порожній");
             }
-        }
-        Console.WriteLine("Натисніть будь-яку клавішу для продовження...");
-        Console.ReadKey();
-    }
+            else
+            {
+                foreach (var kvp in workersDictionary)
+                {
+                    Console.WriteLine($"\n--- Працівник ID: {kvp.Key} ---");
+                    DisplayWorkerInfo(kvp.Value);
+                    Console.WriteLine(new string('-', 40));
+                }
+            }
 
-    // Додаткові методи для меню
-    private static void DisplaySpecificWorker(Worker[] workers)
-    {
-        if (workers == null || workers.Length == 0)
-        {
-            Console.WriteLine("Немає доступних працівників. Будь ласка, спочатку створіть масив працівників.");
             Console.ReadKey();
-            return;
         }
 
-        Console.Write($"Введіть номер працівника (1-{workers.Length}): ");
-        if (int.TryParse(Console.ReadLine(), out int index) && index >= 1 && index <= workers.Length)
+        // 3. Пошук елементів
+        private void FindWorkerById()
         {
-            DisplayWorker(workers[index - 1]);
-        }
-        else
-        {
-            Console.WriteLine("Невірний номер.");
-        }
-        Console.WriteLine("Натисніть будь-яку клавішу для продовження...");
-        Console.ReadKey();
-    }
+            Console.Write("Введіть ID працівника для пошуку: ");
+            if (!int.TryParse(Console.ReadLine(), out int id))
+            {
+                Console.WriteLine("Невірний ID!");
+                Console.ReadKey();
+                return;
+            }
 
-    private static void CalculateWorkExperience(Worker[] workers)
-    {
-        if (workers == null || workers.Length == 0)
-        {
-            Console.WriteLine("Немає доступних працівників. Будь ласка, спочатку створіть масив працівників.");
+            // Використання TryGetValue для безпечного пошуку
+            if (workersDictionary.TryGetValue(id, out Worker worker))
+            {
+                Console.WriteLine($"\n Знайдено працівника з ID: {id}");
+                DisplayWorkerInfo(worker);
+            }
+            else
+            {
+                Console.WriteLine($" Працівник з ID {id} не знайдений");
+            }
+
             Console.ReadKey();
-            return;
         }
 
-        Console.WriteLine("\n=== Стаж роботи ===");
-        foreach (var worker in workers)
+        private void FindWorkerByName()
         {
-            Console.WriteLine($"{worker.FullName}: {worker.GetWorkExperience()} місяців");
-        }
-        Console.WriteLine("Натисніть будь-яку клавішу для продовження...");
-        Console.ReadKey();
-    }
+            Console.Write("Введіть ім'я або частину імені для пошуку: ");
+            string searchName = Console.ReadLine().ToLower();
 
-    private static void CheckLivingNearOffice(Worker[] workers)
-    {
-        if (workers == null || workers.Length == 0)
-        {
-            Console.WriteLine("Немає доступних працівників. Будь ласка, спочатку створіть масив працівників.");
+            // Використання LINQ для пошуку
+            var foundWorkers = workersDictionary
+                .Where(kvp => kvp.Value.FullName.ToLower().Contains(searchName))
+                .ToList();
+
+            Console.WriteLine($"\n=== РЕЗУЛЬТАТИ ПОШУКУ ЗА ІМЕНЕМ '{searchName}' ===");
+            
+            if (foundWorkers.Count == 0)
+            {
+                Console.WriteLine("Працівників не знайдено");
+            }
+            else
+            {
+                foreach (var kvp in foundWorkers)
+                {
+                    Console.WriteLine($"\n--- Працівник ID: {kvp.Key} ---");
+                    Console.WriteLine($" Повне ім'я: {kvp.Value.FullName}");
+                    Console.WriteLine($" Місто: {kvp.Value.HomeCity}");
+                    Console.WriteLine($" Посада: {kvp.Value.WorkPlace.Position}");
+                    Console.WriteLine($" Зарплата: {kvp.Value.WorkPlace.Salary:C}");
+                }
+                Console.WriteLine($"\nЗнайдено: {foundWorkers.Count} працівників");
+            }
+
             Console.ReadKey();
-            return;
         }
 
-        Console.WriteLine("\n=== Проживання біля головного офісу ===");
-        foreach (var worker in workers)
+        // 4. Вилучення елементів
+        private void RemoveWorker()
         {
-            string status = worker.LivesNotFarFromTheMainOffice() ? "ТАК" : "НІ";
-            Console.WriteLine($"{worker.FullName}: {status}");
-        }
-        Console.WriteLine("Натисніть будь-яку клавішу для продовження...");
-        Console.ReadKey();
-    }
+            Console.Write("Введіть ID працівника для видалення: ");
+            if (!int.TryParse(Console.ReadLine(), out int id))
+            {
+                Console.WriteLine(" Невірний ID!");
+                Console.ReadKey();
+                return;
+            }
 
-    // Новий метод для введення премії
-    private static void InputBonusForWorker(Worker[] workers)
-    {
-        if (workers == null || workers.Length == 0)
-        {
-            Console.WriteLine("Немає доступних працівників. Будь ласка, спочатку створіть масив працівників.");
+            if (workersDictionary.Remove(id))
+            {
+                Console.WriteLine($" Працівник з ID {id} успішно видалений");
+                Console.WriteLine($" Залишилось працівників: {workersDictionary.Count}");
+            }
+            else
+            {
+                Console.WriteLine($" Працівник з ID {id} не знайдений");
+            }
+
             Console.ReadKey();
-            return;
         }
 
-        Console.Write($"Введіть номер працівника для введення премії (1-{workers.Length}): ");
-        if (int.TryParse(Console.ReadLine(), out int index) && index >= 1 && index <= workers.Length)
+        // Оновлення даних працівника
+        private void UpdateWorker()
         {
-            workers[index - 1].InputBonus();
-        }
-        else
-        {
-            Console.WriteLine("Невірний номер.");
-        }
-        Console.WriteLine("Натисніть будь-яку клавішу для продовження...");
-        Console.ReadKey();
-    }
+            Console.Write("Введіть ID працівника для оновлення: ");
+            if (!int.TryParse(Console.ReadLine(), out int id))
+            {
+                Console.WriteLine(" Невірний ID!");
+                Console.ReadKey();
+                return;
+            }
 
-    // Новий метод для відображення всіх премій
-    private static void DisplayAllBonuses(Worker[] workers)
-    {
-        if (workers == null || workers.Length == 0)
-        {
-            Console.WriteLine("Немає доступних працівників. Будь ласка, спочатку створіть масив працівників.");
+            if (!workersDictionary.ContainsKey(id))
+            {
+                Console.WriteLine($" Працівник з ID {id} не знайдений");
+                Console.ReadKey();
+                return;
+            }
+
+            Worker worker = workersDictionary[id];
+            Console.WriteLine($"\nОновлення працівника: {worker.FullName}");
+
+            Console.Write("Нове повне ім'я (залиште порожнім, щоб не змінювати): ");
+            string newName = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(newName))
+            {
+                worker.FullName = newName;
+            }
+
+            Console.Write("Нове місто проживання (залиште порожнім, щоб не змінювати): ");
+            string newCity = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(newCity))
+            {
+                worker.HomeCity = newCity;
+            }
+
+            Console.WriteLine(" Дані працівника оновлено!");
             Console.ReadKey();
-            return;
         }
 
-        Console.WriteLine("\n=== Премії всіх працівників ===");
-        for (int i = 0; i < workers.Length; i++)
+        // Додаткові методи
+        private void CalculateWorkExperience()
         {
-            Console.WriteLine($"\nПрацівник #{i + 1}: {workers[i].FullName}");
-            workers[i].DisplayBonus();
+            Console.WriteLine("\n=== СТАЖ РОБОТИ ===");
+            
+            if (workersDictionary.Count == 0)
+            {
+                Console.WriteLine("Словник порожній");
+            }
+            else
+            {
+                foreach (var kvp in workersDictionary)
+                {
+                    Console.WriteLine($"{kvp.Value.FullName}: {kvp.Value.GetWorkExperience()} місяців");
+                }
+            }
+
+            Console.ReadKey();
         }
-        Console.WriteLine("Натисніть будь-яку клавішу для продовження...");
-        Console.ReadKey();
+
+        private void CheckLivingNearOffice()
+        {
+            Console.WriteLine("\n=== ПРОЖИВАННЯ БІЛЯ ГОЛОВНОГО ОФІСУ ===");
+            
+            if (workersDictionary.Count == 0)
+            {
+                Console.WriteLine("Словник порожній");
+            }
+            else
+            {
+                foreach (var kvp in workersDictionary)
+                {
+                    string status = kvp.Value.LivesNotFarFromTheMainOffice() ? " ТАК" : " НІ";
+                    Console.WriteLine($"{kvp.Value.FullName}: {status}");
+                }
+            }
+
+            Console.ReadKey();
+        }
+
+        private void InputBonusForWorker()
+        {
+            Console.Write("Введіть ID працівника для введення премії: ");
+            if (!int.TryParse(Console.ReadLine(), out int id))
+            {
+                Console.WriteLine(" Невірний ID!");
+                Console.ReadKey();
+                return;
+            }
+
+            if (workersDictionary.TryGetValue(id, out Worker worker))
+            {
+                worker.InputBonus();
+            }
+            else
+            {
+                Console.WriteLine($" Працівник з ID {id} не знайдений");
+            }
+
+            Console.ReadKey();
+        }
+
+        private void DisplayAllBonuses()
+        {
+            Console.WriteLine("\n=== ПРЕМІЇ ВСІХ ПРАЦІВНИКІВ ===");
+            
+            if (workersDictionary.Count == 0)
+            {
+                Console.WriteLine("Словник порожній");
+            }
+            else
+            {
+                foreach (var kvp in workersDictionary)
+                {
+                    Console.WriteLine($"\n Працівник ID: {kvp.Key} - {kvp.Value.FullName}");
+                    kvp.Value.DisplayBonus();
+                }
+            }
+
+            Console.ReadKey();
+        }
+
+        // 5. Визначення кількості елементів та статистика
+        private void ShowStatistics()
+        {
+            Console.WriteLine("\n=== СТАТИСТИКА СЛОВНИКА ===");
+            Console.WriteLine($" Загальна кількість працівників: {workersDictionary.Count}");
+            
+            if (workersDictionary.Count > 0)
+            {
+                // Групування за містами
+                var cityGroups = workersDictionary
+                    .GroupBy(kvp => kvp.Value.HomeCity)
+                    .OrderByDescending(g => g.Count());
+                
+                Console.WriteLine("\n Розподіл за містами:");
+                foreach (var group in cityGroups)
+                {
+                    Console.WriteLine($"  {group.Key}: {group.Count()} працівників");
+                }
+
+                // Статистика зайнятості
+                var fullTimeCount = workersDictionary.Count(kvp => kvp.Value.WorkPlace.IsFullTimeEmployee);
+                var partTimeCount = workersDictionary.Count - fullTimeCount;
+                
+                Console.WriteLine($"\n Тип зайнятості:");
+                Console.WriteLine($"  Повний робочий день: {fullTimeCount}");
+                Console.WriteLine($"  Неповний робочий день: {partTimeCount}");
+
+                // Середній стаж
+                double avgExperience = workersDictionary.Average(kvp => kvp.Value.GetWorkExperience());
+                Console.WriteLine($"\n Середній стаж роботи: {avgExperience:F1} місяців");
+
+                // Працівники з найбільшим стажем
+                var topExperienced = workersDictionary
+                    .OrderByDescending(kvp => kvp.Value.GetWorkExperience())
+                    .Take(3);
+                
+                Console.WriteLine($"\n Топ-3 працівників за стажем:");
+                foreach (var kvp in topExperienced)
+                {
+                    Console.WriteLine($"  {kvp.Value.FullName}: {kvp.Value.GetWorkExperience()} місяців");
+                }
+            }
+
+            Console.ReadKey();
+        }
+
+        // 6. Очищення колекції
+        private void ClearDictionary()
+        {
+            if (workersDictionary.Count == 0)
+            {
+                Console.WriteLine("Словник вже порожній");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.Write("Ви впевнені, що хочете очистити весь словник? (так/ні): ");
+            string confirmation = Console.ReadLine().ToLower();
+
+            if (confirmation == "так" || confirmation == "1")
+            {
+                workersDictionary.Clear();
+                nextId = 1;
+                Console.WriteLine(" Словник повністю очищено!");
+            }
+            else
+            {
+                Console.WriteLine("Очищення скасовано");
+            }
+
+            Console.ReadKey();
+        }
+
+        private void DisplayWorkerInfo(Worker worker)
+        {
+            Console.WriteLine(worker.ToString());
+            Console.WriteLine($" Стаж роботи: {worker.GetWorkExperience()} місяців");
+            Console.WriteLine($" Мешкає біля головного офісу: {(worker.LivesNotFarFromTheMainOffice() ? " ТАК" : " НІ")}");
+        }
     }
 }
