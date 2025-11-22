@@ -1,0 +1,14 @@
+d:\Python\C#\SortedListDemo\bin\Debug\net6.0\SortedListDemo.exe
+d:\Python\C#\SortedListDemo\bin\Debug\net6.0\SortedListDemo.deps.json
+d:\Python\C#\SortedListDemo\bin\Debug\net6.0\SortedListDemo.runtimeconfig.json
+d:\Python\C#\SortedListDemo\bin\Debug\net6.0\SortedListDemo.dll
+d:\Python\C#\SortedListDemo\bin\Debug\net6.0\SortedListDemo.pdb
+d:\Python\C#\SortedListDemo\obj\Debug\net6.0\SortedListDemo.GeneratedMSBuildEditorConfig.editorconfig
+d:\Python\C#\SortedListDemo\obj\Debug\net6.0\SortedListDemo.AssemblyInfoInputs.cache
+d:\Python\C#\SortedListDemo\obj\Debug\net6.0\SortedListDemo.AssemblyInfo.cs
+d:\Python\C#\SortedListDemo\obj\Debug\net6.0\SortedListDemo.csproj.CoreCompileInputs.cache
+d:\Python\C#\SortedListDemo\obj\Debug\net6.0\SortedListDemo.dll
+d:\Python\C#\SortedListDemo\obj\Debug\net6.0\refint\SortedListDemo.dll
+d:\Python\C#\SortedListDemo\obj\Debug\net6.0\SortedListDemo.pdb
+d:\Python\C#\SortedListDemo\obj\Debug\net6.0\SortedListDemo.genruntimeconfig.cache
+d:\Python\C#\SortedListDemo\obj\Debug\net6.0\ref\SortedListDemo.dll
