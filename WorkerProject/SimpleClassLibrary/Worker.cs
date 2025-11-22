@@ -142,7 +142,7 @@ namespace SimpleClassLibrary
                 Console.Write("Будь ласка, введіть коректну суму премії: ");
             }
 
-            // Курси валют (можна зробити константами або виносити в налаштування)
+            // Курси валют
             const decimal usdToUah = 39.5m;
             const decimal eurToUah = 42.8m;
             const decimal usdToEur = 0.92m;
