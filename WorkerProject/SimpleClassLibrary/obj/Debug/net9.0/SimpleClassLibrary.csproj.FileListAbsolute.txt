@@ -1,0 +1,11 @@
+d:\Python\C#\WorkerProject\SimpleClassLibrary\bin\Debug\net9.0\SimpleClassLibrary.deps.json
+d:\Python\C#\WorkerProject\SimpleClassLibrary\bin\Debug\net9.0\SimpleClassLibrary.dll
+d:\Python\C#\WorkerProject\SimpleClassLibrary\bin\Debug\net9.0\SimpleClassLibrary.pdb
+d:\Python\C#\WorkerProject\SimpleClassLibrary\obj\Debug\net9.0\SimpleClassLibrary.GeneratedMSBuildEditorConfig.editorconfig
+d:\Python\C#\WorkerProject\SimpleClassLibrary\obj\Debug\net9.0\SimpleClassLibrary.AssemblyInfoInputs.cache
+d:\Python\C#\WorkerProject\SimpleClassLibrary\obj\Debug\net9.0\SimpleClassLibrary.AssemblyInfo.cs
+d:\Python\C#\WorkerProject\SimpleClassLibrary\obj\Debug\net9.0\SimpleClassLibrary.csproj.CoreCompileInputs.cache
+d:\Python\C#\WorkerProject\SimpleClassLibrary\obj\Debug\net9.0\SimpleClassLibrary.dll
+d:\Python\C#\WorkerProject\SimpleClassLibrary\obj\Debug\net9.0\refint\SimpleClassLibrary.dll
+d:\Python\C#\WorkerProject\SimpleClassLibrary\obj\Debug\net9.0\SimpleClassLibrary.pdb
+d:\Python\C#\WorkerProject\SimpleClassLibrary\obj\Debug\net9.0\ref\SimpleClassLibrary.dll
